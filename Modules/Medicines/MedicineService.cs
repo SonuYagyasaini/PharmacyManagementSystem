@@ -10,12 +10,43 @@ public sealed class MedicineService(
 {
     public async Task<IReadOnlyList<MedicineResponse>> GetMedicinesAsync(
         string? search,
+        string? sortBy,
+        string? sortDirection,
         CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("Fetching medicines. Search: {Search}", search);
+        logger.LogInformation("Fetching medicines. Search: {Search}, SortBy: {SortBy}, SortDirection: {SortDirection}", search, sortBy, sortDirection);
 
         var medicines = await repository.GetAllAsync(search, cancellationToken: cancellationToken);
-        return medicines.Select(ToResponse).ToList();
+
+        var normalizedSortBy = (sortBy ?? "createdAtUtc").Trim().ToLowerInvariant();
+        var normalizedDirection = (sortDirection ?? "desc").Trim().ToLowerInvariant();
+
+        var sortedMedicines = normalizedSortBy switch
+        {
+            "fullname" or "name" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.FullName)
+                : medicines.OrderByDescending(m => m.FullName),
+            "brand" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.Brand)
+                : medicines.OrderByDescending(m => m.Brand),
+            "quantity" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.Quantity)
+                : medicines.OrderByDescending(m => m.Quantity),
+            "price" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.Price)
+                : medicines.OrderByDescending(m => m.Price),
+            "expirydate" or "expiry" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.ExpiryDate)
+                : medicines.OrderByDescending(m => m.ExpiryDate),
+            "status" or "stockage" => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.ExpiryDate).ThenBy(m => m.Quantity)
+                : medicines.OrderByDescending(m => m.ExpiryDate).ThenByDescending(m => m.Quantity),
+            _ => normalizedDirection == "asc"
+                ? medicines.OrderBy(m => m.CreatedAtUtc)
+                : medicines.OrderByDescending(m => m.CreatedAtUtc)
+        };
+
+        return sortedMedicines.Select(ToResponse).ToList();
     }
 
     public async Task<MedicineResponse> GetMedicineAsync(Guid id, CancellationToken cancellationToken = default)

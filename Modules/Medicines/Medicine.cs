@@ -34,8 +34,8 @@ public sealed class Medicine
     {
         get
         {
-            var daysToExpiry = ExpiryDate.DayNumber - DateOnly.FromDateTime(DateTime.Today).DayNumber;
-            return daysToExpiry < 30;
+            var today = DateOnly.FromDateTime(DateTime.Today);
+            return ExpiryDate <= today.AddDays(30);
         }
     }
 

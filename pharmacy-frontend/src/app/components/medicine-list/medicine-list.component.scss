@@ -1,0 +1,223 @@
+.page-shell {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+}
+
+.toolbar-left h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.5vw, 2.6rem);
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: #475569;
+}
+
+.toolbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toolbar-right input {
+  min-width: 240px;
+  padding: 0.8rem 1rem;
+  border-radius: 0.85rem;
+  border: 1px solid #cbd5e1;
+  background: white;
+  color: #0f172a;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 1.25rem;
+  background: white;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.medicine-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.medicine-table th,
+.medicine-table td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  color: #0f172a;
+}
+
+.medicine-table th {
+  padding: 0;
+}
+
+.medicine-table thead {
+  background: #f1f5f9;
+}
+
+.medicine-table tbody tr + tr {
+  border-top: 1px solid #e2e8f0;
+}
+
+.actions-cell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sale-panel,
+.sales-panel {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+}
+
+.sale-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sale-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.product-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.product-brand {
+  margin: 0.35rem 0 0;
+  color: #475569;
+}
+
+.stock-badge {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.sale-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.sale-row input {
+  width: 100%;
+  border-radius: 0.85rem;
+  border: 1px solid #cbd5e1;
+  padding: 0.85rem 0.95rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.pill.warning {
+  background: #fef3c7;
+  color: #78350f;
+}
+
+.pill.caution {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.row-expiring {
+  background: #fee2e2;
+  box-shadow: inset 4px 0 0 #ef4444;
+}
+
+.row-low-stock {
+  background: #fef9c3;
+}
+
+.sort-button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 1rem 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sort-button:hover {
+  background: #f8fafc;
+}
+
+.sort-indicator {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.sell-button {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  border-radius: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sell-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.25);
+}
+
+@media (max-width: 940px) {
+  .toolbar {
+    align-items: stretch;
+  }
+
+  .sale-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .medicine-table th,
+  .medicine-table td {
+    padding: 0.85rem;
+  }
+}

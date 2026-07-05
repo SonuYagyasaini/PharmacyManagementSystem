@@ -1,0 +1,93 @@
+<section class="page-shell">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <h1>Medicines</h1>
+      <p class="subtitle">Search, update and record sales for your inventory.</p>
+    </div>
+    <div class="toolbar-right">
+      <input
+        type="search"
+        placeholder="Search medicine name"
+        [(ngModel)]="search"
+        (keyup.enter)="searchMedicines()"
+        (blur)="searchMedicines()"
+        aria-label="Search medicines"
+      />
+      <button type="button" class="secondary" (click)="resetSearch()">Clear</button>
+      <a class="primary" routerLink="/medicine/add">Add Medicine</a>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="banner error">{{ error }}</div>
+  <div *ngIf="loading" class="banner">Loading medicines...</div>
+
+  <div *ngIf="!loading && medicines.length === 0" class="empty-state">
+    No medicines found. Use the Add Medicine button to create inventory.
+  </div>
+
+  <div class="table-wrapper" *ngIf="medicines.length > 0">
+    <table class="medicine-table">
+      <thead>
+        <tr>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('fullName')">Medicine <span class="sort-indicator">{{ getSortIndicator('fullName') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('brand')">Brand <span class="sort-indicator">{{ getSortIndicator('brand') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('quantity')">Quantity <span class="sort-indicator">{{ getSortIndicator('quantity') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('price')">Price <span class="sort-indicator">{{ getSortIndicator('price') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('expiryDate')">Expiry <span class="sort-indicator">{{ getSortIndicator('expiryDate') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('status')">Status <span class="sort-indicator">{{ getSortIndicator('status') }}</span></button></th>
+          <th><button type="button" class="sort-button" (click)="sortByColumn('createdAtUtc')">Created <span class="sort-indicator">{{ getSortIndicator('createdAtUtc') }}</span></button></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let medicine of medicines" [ngClass]="getRowClasses(medicine)">
+          <td>{{ medicine.fullName }}</td>
+          <td>{{ medicine.brand }}</td>
+          <td>{{ medicine.quantity }}</td>
+          <td>{{ medicine.price | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td>{{ medicine.expiryDate }}</td>
+          <td>
+            <span *ngIf="medicine.isExpiringWithin30Days" class="pill warning">Expires soon</span>
+            <span *ngIf="medicine.isLowStock" class="pill caution">Low stock</span>
+            <span *ngIf="!medicine.isExpiringWithin30Days && !medicine.isLowStock">OK</span>
+          </td>
+          <td>{{ medicine.createdAtUtc | date:'mediumDate' }}</td>
+          <td class="actions-cell">
+            <button type="button" class="ghost" (click)="viewMedicine(medicine.id)">View</button>
+            <button type="button" class="ghost" (click)="editMedicine(medicine.id)">Edit</button>
+            <button type="button" class="danger" (click)="deleteMedicine(medicine.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sales-panel">
+    <h2>Record medicine sale</h2>
+    <p>Select a medicine row to enter quantity and submit a sale.</p>
+    <div class="sale-grid">
+      <div class="sale-card" *ngFor="let medicine of medicines" [ngClass]="getRowClasses(medicine)">
+        <div class="product-header">
+          <div>
+            <p class="product-name">{{ medicine.fullName }}</p>
+            <p class="product-brand">{{ medicine.brand }}</p>
+          </div>
+          <div class="stock-badge">Stock: {{ medicine.quantity }}</div>
+        </div>
+        <div class="sale-row">
+          <label>
+            Quantity
+            <input
+              type="number"
+              [min]="1"
+              [max]="medicine.quantity"
+              [(ngModel)]="saleQuantities[medicine.id]"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </label>
+          <button type="button" class="sell-button" (click)="recordSale(medicine)">Sell</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

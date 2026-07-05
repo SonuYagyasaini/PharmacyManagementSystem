@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 245, 250, 0.95) 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="medicine-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="8" fill="%23e0e7ff" opacity="0.3"/><rect x="40" y="60" width="20" height="60" rx="5" fill="%23dbeafe" opacity="0.2"/><circle cx="150" cy="100" r="6" fill="%23fef3c7" opacity="0.3"/><line x1="30" y1="150" x2="170" y2="150" stroke="%23e5e7eb" stroke-width="1" opacity="0.4"/></pattern></defs><rect width="1200" height="800" fill="none"/><rect width="1200" height="800" fill="url(%23medicine-pattern)"/></svg>') no-repeat center;
+  background-size: cover, auto;
+}
+
+.app-main {
+  position: relative;
+  z-index: 1;
+}
+
+.app-shell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, #2563eb, #8b5cf6);
+  color: white;
+  flex-wrap: wrap;
+}
+
+.brand-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.brand-tag {
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  border-radius: 0.85rem;
+}
+
+.nav-link.button {
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  color: white;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-link.button:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  box-shadow: 0 14px 24px rgba(37, 99, 235, 0.24);
+}
+
+.app-main {
+  padding: 1.5rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}

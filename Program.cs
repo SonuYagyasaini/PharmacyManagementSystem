@@ -8,6 +8,8 @@ using PharmacyManagement.Api.Modules.Sales;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://127.0.0.1:5170");
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
@@ -19,8 +21,8 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin()
+    options.AddPolicy("FrontendPolicy", policy =>
+        policy.WithOrigins("http://localhost:4200", "http://127.0.0.1:4200")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
@@ -32,7 +34,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "ABC Pharmacy Management API",
         Version = "v1",
-        Description = "Modular monolithic .NET 8 API with SQL Server, EF Core Code First, logging, and audit tracking."
+        Description = "Modular monolithic .NET 9 API with SQL Server, EF Core Code First, logging, and audit tracking."
     });
 });
 
@@ -61,7 +63,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRequestLogging();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-app.UseCors();
+app.UseCors("FrontendPolicy");
 
 app.MapGet("/", () => Results.Ok(new
 {

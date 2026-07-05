@@ -1,0 +1,53 @@
+<section class="page-shell">
+  <div class="toolbar">
+    <div>
+      <h1>{{ title }}</h1>
+      <p class="subtitle">{{ mode === 'view' ? 'Inspect the medicine details' : 'Manage medicine inventory details' }}</p>
+    </div>
+    <a class="secondary" routerLink="/">Back to list</a>
+  </div>
+
+  <div *ngIf="error" class="banner error">{{ error }}</div>
+  <div *ngIf="successMessage" class="banner success">{{ successMessage }}</div>
+  <div *ngIf="loading && mode !== 'view'" class="banner">Loading...</div>
+
+  <form [formGroup]="form" class="medicine-form" (ngSubmit)="submit()">
+    <div class="row-group">
+      <label>
+        Medicine name
+        <input formControlName="fullName" [disabled]="isViewMode" placeholder="Updated medicine name" />
+      </label>
+      <label>
+        Brand
+        <input formControlName="brand" [disabled]="isViewMode" placeholder="Brand name" />
+      </label>
+    </div>
+
+    <div class="row-group">
+      <label>
+        Quantity
+        <input type="number" formControlName="quantity" [disabled]="isViewMode" min="0" />
+      </label>
+      <label>
+        Price
+        <input type="number" formControlName="price" [disabled]="isViewMode" min="0" step="0.01" />
+      </label>
+    </div>
+
+    <div class="row-group">
+      <label>
+        Expiry date
+        <input type="date" formControlName="expiryDate" [disabled]="isViewMode" />
+      </label>
+      <label>
+        Notes
+        <textarea formControlName="notes" [disabled]="isViewMode" rows="4" placeholder="Optional notes"></textarea>
+      </label>
+    </div>
+
+    <div class="form-actions" *ngIf="!isViewMode">
+      <button type="button" class="secondary" (click)="cancel()">Cancel</button>
+      <button type="submit" class="primary">{{ mode === 'edit' ? 'Save Changes' : 'Create Medicine' }}</button>
+    </div>
+  </form>
+</section>

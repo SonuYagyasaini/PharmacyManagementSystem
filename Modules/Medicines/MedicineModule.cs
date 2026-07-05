@@ -13,8 +13,8 @@ public static class MedicineModule
     {
         var group = app.MapGroup("/api/medicines");
 
-        group.MapGet("/", async (string? search, MedicineService service, CancellationToken cancellationToken) =>
-            Results.Ok(await service.GetMedicinesAsync(search, cancellationToken)));
+        group.MapGet("/", async (string? search, string? sortBy, string? sortDirection, MedicineService service, CancellationToken cancellationToken) =>
+            Results.Ok(await service.GetMedicinesAsync(search, sortBy, sortDirection, cancellationToken)));
 
         group.MapGet("/{id:guid}", async (Guid id, MedicineService service, CancellationToken cancellationToken) =>
             Results.Ok(await service.GetMedicineAsync(id, cancellationToken)));
