@@ -1,0 +1,78 @@
+using Microsoft.EntityFrameworkCore;
+using PharmacyManagement.Api.Infrastructure.Auditing;
+using PharmacyManagement.Api.Infrastructure.Exceptions;
+using PharmacyManagement.Api.Infrastructure.Logging;
+using PharmacyManagement.Api.Infrastructure.Persistence;
+using PharmacyManagement.Api.Modules.Medicines;
+using PharmacyManagement.Api.Modules.Sales;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+builder.Services.AddDbContext<PharmacyDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PharmacyDb")));
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new()
+    {
+        Title = "ABC Pharmacy Management API",
+        Version = "v1",
+        Description = "Modular monolithic .NET 8 API with SQL Server, EF Core Code First, logging, and audit tracking."
+    });
+});
+
+builder.Services.AddMedicineModule();
+builder.Services.AddSalesModule();
+builder.Services.AddScoped<AuditLogService>();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "ABC Pharmacy Management API v1");
+        options.RoutePrefix = "swagger";
+    });
+}
+
+app.UseRequestLogging();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseCors();
+
+app.MapGet("/", () => Results.Ok(new
+{
+    application = "ABC Pharmacy Management API",
+    architecture = "Modular Monolith",
+    database = "SQL Server with EF Core Code First",
+    features = new[]
+    {
+        "Centralized exception handling",
+        "SQL request/response logging",
+        "SQL audit logging for create/update/delete",
+        "Medicine management",
+        "Sale records"
+    }
+}));
+
+app.MapMedicineEndpoints();
+app.MapSalesEndpoints();
+app.MapLoggingEndpoints();
+
+app.Run();
