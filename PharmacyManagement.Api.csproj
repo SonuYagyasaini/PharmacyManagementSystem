@@ -19,4 +19,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
   </ItemGroup>
 
+  <!-- Exclude test source files placed under the solution Tests/ folder
+       to prevent the API project from trying to compile them. -->
+  <ItemGroup>
+    <Compile Remove="Tests\**\*.cs" />
+  </ItemGroup>
+
 </Project>

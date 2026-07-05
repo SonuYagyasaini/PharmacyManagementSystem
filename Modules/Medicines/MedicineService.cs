@@ -140,19 +140,21 @@ public sealed class MedicineService(
     }
 
     private static MedicineResponse ToResponse(Medicine medicine)
-        => new(
-            medicine.Id,
-            medicine.FullName,
-            medicine.Notes,
-            medicine.ExpiryDate,
-            medicine.Quantity,
-            medicine.Price,
-            medicine.Brand,
-            medicine.IsExpiringWithin30Days,
-            medicine.IsLowStock,
-            medicine.HighlightColor,
-            medicine.CreatedAtUtc,
-            medicine.UpdatedAtUtc);
+        => new MedicineResponse
+        {
+            Id = medicine.Id,
+            FullName = medicine.FullName,
+            Notes = medicine.Notes,
+            ExpiryDate = medicine.ExpiryDate,
+            Quantity = medicine.Quantity,
+            Price = medicine.Price,
+            Brand = medicine.Brand,
+            IsExpiringWithin30Days = medicine.IsExpiringWithin30Days,
+            IsLowStock = medicine.IsLowStock,
+            HighlightColor = medicine.HighlightColor,
+            CreatedAtUtc = medicine.CreatedAtUtc,
+            UpdatedAtUtc = medicine.UpdatedAtUtc
+        };
 
     private static object ToAuditSnapshot(Medicine medicine)
         => new

@@ -77,14 +77,16 @@ public sealed class SaleService(
     }
 
     private static SaleResponse ToResponse(Sale sale)
-        => new(
-            sale.Id,
-            sale.MedicineId,
-            sale.MedicineName,
-            sale.Quantity,
-            sale.UnitPrice,
-            sale.TotalAmount,
-            sale.SoldAtUtc);
+        => new SaleResponse
+        {
+            Id = sale.Id,
+            MedicineId = sale.MedicineId,
+            MedicineName = sale.MedicineName,
+            Quantity = sale.Quantity,
+            UnitPrice = sale.UnitPrice,
+            TotalAmount = sale.TotalAmount,
+            SoldAtUtc = sale.SoldAtUtc
+        };
 
     private static object ToAuditSnapshot(Sale sale)
         => new

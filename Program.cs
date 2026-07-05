@@ -36,6 +36,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Configure Minimal API JSON options to be case-insensitive and support DateOnly
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+    options.SerializerOptions.Converters.Add(new PharmacyManagement.Api.Infrastructure.Json.DateOnlyJsonConverter());
+});
+
 builder.Services.AddMedicineModule();
 builder.Services.AddSalesModule();
 builder.Services.AddScoped<AuditLogService>();
