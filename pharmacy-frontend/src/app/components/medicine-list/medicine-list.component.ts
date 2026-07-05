@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PharmacyService } from '../../services/pharmacy.service';
 import { Medicine } from '../../models/medicine.model';
 
@@ -15,12 +16,13 @@ type SortDirection = 'asc' | 'desc';
   templateUrl: './medicine-list.component.html',
   styleUrls: ['./medicine-list.component.scss'],
 })
-export class MedicineListComponent implements OnInit {
+export class MedicineListComponent implements OnInit, OnDestroy {
   medicines: Medicine[] = [];
   loading = false;
   search = '';
   error?: string;
   saleQuantities: Record<string, number> = {};
+  private refreshSub?: Subscription;
   sortBy: SortColumn = 'createdAtUtc';
   sortDirection: SortDirection = 'desc';
 
@@ -34,6 +36,12 @@ export class MedicineListComponent implements OnInit {
         this.loadMedicines();
       }
     });
+    // Reload when service emits refresh events (create/update/delete/sale)
+    this.refreshSub = this.pharmacy.refresh$.subscribe(() => this.loadMedicines());
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSub?.unsubscribe();
   }
 
   loadMedicines(): void {
