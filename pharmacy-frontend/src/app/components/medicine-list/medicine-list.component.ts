@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 import { PharmacyService } from '../../services/pharmacy.service';
 import { Medicine } from '../../models/medicine.model';
 
@@ -18,11 +18,11 @@ type SortDirection = 'asc' | 'desc';
 })
 export class MedicineListComponent implements OnInit, OnDestroy {
   medicines: Medicine[] = [];
-  loading = false;
+  loading: boolean = false;
   search = '';
   error?: string;
   saleQuantities: Record<string, number> = {};
-  private refreshSub?: Subscription;
+  private subscriptions = new Subscription();
   sortBy: SortColumn = 'createdAtUtc';
   sortDirection: SortDirection = 'desc';
 
@@ -30,18 +30,24 @@ export class MedicineListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadMedicines();
-    // Auto-reload list when navigating back to this component
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd && event.url === '/') {
-        this.loadMedicines();
-      }
-    });
-    // Reload when service emits refresh events (create/update/delete/sale)
-    this.refreshSub = this.pharmacy.refresh$.subscribe(() => this.loadMedicines());
+
+    this.subscriptions.add(
+      this.router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+        .subscribe((event) => {
+          if (event.url === '/' || event.urlAfterRedirects === '/') {
+            this.search = '';
+            this.loadMedicines();
+          }
+        })
+    );
+
+    this.subscriptions.add(
+      this.pharmacy.refresh$.subscribe(() => this.loadMedicines())
+    );
   }
 
   ngOnDestroy(): void {
-    this.refreshSub?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   loadMedicines(): void {
@@ -53,6 +59,7 @@ export class MedicineListComponent implements OnInit, OnDestroy {
       next: (medicines) => {
         this.medicines = Array.isArray(medicines) ? medicines : [];
         this.loading = false;
+        console.log('Medicines loaded:', this.medicines);
       },
       error: (err) => {
         console.error('Medicine load error:', err);

@@ -39,7 +39,7 @@ public sealed class Medicine
         }
     }
 
-    public bool IsLowStock => Quantity < 10;
+    public bool IsLowStock => Quantity <= 10;
 
     public string HighlightColor => IsExpiringWithin30Days
         ? "red"

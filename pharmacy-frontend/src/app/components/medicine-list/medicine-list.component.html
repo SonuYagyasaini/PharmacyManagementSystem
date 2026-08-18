@@ -19,7 +19,7 @@
   </div>
 
   <div *ngIf="error" class="banner error">{{ error }}</div>
-  <div *ngIf="loading" class="banner">Loading medicines...</div>
+  <div *ngIf="loading" class="banner">Loading medicines...{{ medicines.length}}</div>
 
   <div *ngIf="!loading && medicines.length === 0" class="empty-state">
     No medicines found. Use the Add Medicine button to create inventory.

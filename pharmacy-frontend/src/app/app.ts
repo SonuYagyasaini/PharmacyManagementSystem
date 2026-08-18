@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { MedicineListComponent } from './components/medicine-list/medicine-list.component';
 
 @Component({
   selector: 'app-root',
